@@ -1,0 +1,95 @@
+@model IEnumerable<TaskManager01.Models.TaskItem>
+@{
+    ViewData["Title"] = "タスク一覧";
+}
+
+<h2>タスク一覧</h2>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">+ 新規タスク作成</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <select name="statusFilter" class="form-select">
+            <option value="">-- ステータス --</option>
+            <option value="Pending" selected="@(ViewBag.StatusFilter == "Pending")">Pending</option>
+            <option value="InProgress" selected="@(ViewBag.StatusFilter == "InProgress")">InProgress</option>
+            <option value="Completed" selected="@(ViewBag.StatusFilter == "Completed")">Completed</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select name="priorityFilter" class="form-select">
+            <option value="">-- 優先度 --</option>
+            <option value="Low" selected="@(ViewBag.PriorityFilter == "Low")">Low</option>
+            <option value="Medium" selected="@(ViewBag.PriorityFilter == "Medium")">Medium</option>
+            <option value="High" selected="@(ViewBag.PriorityFilter == "High")">High</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select name="sortBy" class="form-select">
+            <option value="">-- 並び替え --</option>
+            <option value="title" selected="@(ViewBag.SortBy == "title")">タイトル</option>
+            <option value="priority" selected="@(ViewBag.SortBy == "priority")">優先度</option>
+            <option value="duedate" selected="@(ViewBag.SortBy == "duedate")">期限日</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">絞り込み</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">リセット</a>
+    </div>
+</form>
+
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>タイトル</th>
+            <th>ステータス</th>
+            <th>優先度</th>
+            <th>期限日</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>
+                    @{
+                        var statusBadge = task.Status switch
+                        {
+                            TaskManager01.Models.TaskStatus.Pending => "secondary",
+                            TaskManager01.Models.TaskStatus.InProgress => "primary",
+                            TaskManager01.Models.TaskStatus.Completed => "success",
+                            _ => "secondary"
+                        };
+                    }
+                    <span class="badge bg-@statusBadge">@task.Status</span>
+                </td>
+                <td>
+                    @{
+                        var priorityBadge = task.Priority switch
+                        {
+                            TaskManager01.Models.TaskPriority.Low => "info",
+                            TaskManager01.Models.TaskPriority.Medium => "warning",
+                            TaskManager01.Models.TaskPriority.High => "danger",
+                            _ => "secondary"
+                        };
+                    }
+                    <span class="badge bg-@priorityBadge">@task.Priority</span>
+                </td>
+                <td>@(task.DueDate.HasValue ? task.DueDate.Value.ToString("yyyy/MM/dd") : "-")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="btn btn-sm btn-outline-info">詳細</a>
+                    <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-outline-primary">編集</a>
+                    <a asp-action="Delete" asp-route-id="@task.Id" class="btn btn-sm btn-outline-danger">削除</a>
+                </td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="5" class="text-center text-muted">タスクがありません。</td></tr>
+        }
+    </tbody>
+</table>

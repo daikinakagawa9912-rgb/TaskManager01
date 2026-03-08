@@ -1,0 +1,30 @@
+@model TaskManager01.Models.TaskItem
+@{
+    ViewData["Title"] = "タスク削除";
+}
+
+<h2>タスク削除の確認</h2>
+
+<div class="alert alert-danger">
+    <p>以下のタスクを削除しますか？この操作は取り消せません。</p>
+</div>
+
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text text-muted">@Model.Description</p>
+        <dl class="row">
+            <dt class="col-sm-4">ステータス</dt>
+            <dd class="col-sm-8">@Model.Status</dd>
+            <dt class="col-sm-4">優先度</dt>
+            <dd class="col-sm-8">@Model.Priority</dd>
+            <dt class="col-sm-4">期限日</dt>
+            <dd class="col-sm-8">@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("yyyy/MM/dd") : "-")</dd>
+        </dl>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="削除する" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">キャンセル</a>
+        </form>
+    </div>
+</div>

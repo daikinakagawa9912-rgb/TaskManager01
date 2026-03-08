@@ -1,0 +1,49 @@
+@model TaskManager01.Models.TaskItem
+@{
+    ViewData["Title"] = "タスク詳細";
+}
+
+<h2>タスク詳細</h2>
+
+<div class="card" style="max-width: 600px;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text">@Model.Description</p>
+        <dl class="row">
+            <dt class="col-sm-4">ステータス</dt>
+            <dd class="col-sm-8">
+                @{
+                    var statusBadge = Model.Status switch
+                    {
+                        TaskManager01.Models.TaskStatus.Pending => "secondary",
+                        TaskManager01.Models.TaskStatus.InProgress => "primary",
+                        TaskManager01.Models.TaskStatus.Completed => "success",
+                        _ => "secondary"
+                    };
+                }
+                <span class="badge bg-@statusBadge">@Model.Status</span>
+            </dd>
+            <dt class="col-sm-4">優先度</dt>
+            <dd class="col-sm-8">
+                @{
+                    var priorityBadge = Model.Priority switch
+                    {
+                        TaskManager01.Models.TaskPriority.Low => "info",
+                        TaskManager01.Models.TaskPriority.Medium => "warning",
+                        TaskManager01.Models.TaskPriority.High => "danger",
+                        _ => "secondary"
+                    };
+                }
+                <span class="badge bg-@priorityBadge">@Model.Priority</span>
+            </dd>
+            <dt class="col-sm-4">期限日</dt>
+            <dd class="col-sm-8">@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("yyyy/MM/dd") : "-")</dd>
+            <dt class="col-sm-4">作成日時</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</dd>
+            <dt class="col-sm-4">更新日時</dt>
+            <dd class="col-sm-8">@Model.UpdatedAt.ToString("yyyy/MM/dd HH:mm")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">編集</a>
+        <a asp-action="Index" class="btn btn-secondary">一覧に戻る</a>
+    </div>
+</div>

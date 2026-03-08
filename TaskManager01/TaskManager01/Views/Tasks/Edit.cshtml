@@ -1,0 +1,47 @@
+@model TaskManager01.Models.TaskItem
+@{
+    ViewData["Title"] = "タスク編集";
+}
+
+<h2>タスク編集</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedAt" />
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">タイトル</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">説明</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">ステータス</label>
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<TaskManager01.Models.TaskStatus>()"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Priority" class="form-label">優先度</label>
+                <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<TaskManager01.Models.TaskPriority>()"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label">期限日</label>
+                <input asp-for="DueDate" class="form-control" type="date" />
+            </div>
+            <div>
+                <input type="submit" value="保存" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">キャンセル</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
