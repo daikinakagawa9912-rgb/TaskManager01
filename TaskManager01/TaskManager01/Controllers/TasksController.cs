@@ -58,8 +58,8 @@ namespace TaskManager01.Controllers
         {
             if (ModelState.IsValid)
             {
-                task.CreatedAt = DateTime.Now;
-                task.UpdatedAt = DateTime.Now;
+                task.CreatedAt = DateTime.UtcNow;
+                task.UpdatedAt = DateTime.UtcNow;
                 _context.Add(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -85,7 +85,7 @@ namespace TaskManager01.Controllers
             {
                 try
                 {
-                    task.UpdatedAt = DateTime.Now;
+                    task.UpdatedAt = DateTime.UtcNow;
                     _context.Update(task);
                     await _context.SaveChangesAsync();
                 }
