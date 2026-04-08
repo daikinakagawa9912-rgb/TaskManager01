@@ -39,6 +39,7 @@ _FK_RE = re.compile(
 _PK_INLINE_RE = re.compile(r"\bPRIMARY\s+KEY\b", re.IGNORECASE)
 _NOT_NULL_RE = re.compile(r"\bNOT\s+NULL\b", re.IGNORECASE)
 _TABLE_PK_RE = re.compile(
+    # Bounded quantifier {1,500} guards against ReDoS on malformed DDL input.
     r"PRIMARY\s+KEY\s?\(([^)]{1,500})\)",
     re.IGNORECASE,
 )

@@ -80,13 +80,13 @@ function clearError() {
 }
 
 // ── Clipboard ──────────────────────────────────────────────────────────────
-function copyToClipboard(elementId, btn) {
+function copyToClipboard(elementId, buttonElement) {
   const text = document.getElementById(elementId).textContent;
   if (!text || text === '-') return;
   navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = '✅ コピー完了';
-    setTimeout(() => { btn.textContent = orig; }, 1500);
+    const orig = buttonElement.textContent;
+    buttonElement.textContent = '✅ コピー完了';
+    setTimeout(() => { buttonElement.textContent = orig; }, 1500);
   });
 }
 
