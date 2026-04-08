@@ -2,7 +2,7 @@
 Pydantic data models for the Secure AI Coding Service.
 """
 from typing import Any, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # ─────────────────────────── Request / Response ────────────────────────────
@@ -55,8 +55,11 @@ class CaseWhenCondition(BaseModel):
 
 
 class CaseExpression(BaseModel):
+    # `else` is a Python reserved word; use alias so JSON uses "else" as the key.
+    model_config = ConfigDict(populate_by_name=True)
+
     when: list[CaseWhenCondition]
-    else_value: str
+    else_value: str = Field(alias="else")
     alias: str
 
 

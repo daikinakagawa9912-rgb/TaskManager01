@@ -65,11 +65,18 @@ def _build_requirements_json(
     distinct = False
 
     col_ref_re = re.compile(r"(Table\d+)\.(Column\d+)", re.IGNORECASE)
+    # Use \b word-boundary and make join type non-optional-before-JOIN to avoid
+    # catastrophic backtracking on inputs with many whitespace characters.
     join_re = re.compile(
-        r"(INNER|LEFT|RIGHT|FULL)?\s*JOIN\s+(Table\d+)\s+ON\s+(.+)", re.IGNORECASE
+        r"\b(?:(INNER|LEFT|RIGHT|FULL)\s+)?JOIN\s+(Table\d+)\s+ON\s+(\S.*)",
+        re.IGNORECASE,
     )
+    # Use non-ambiguous value capture: either a quoted string or a non-whitespace
+    # token.  This avoids polynomial backtracking caused by optional-quote + .+?
+    # combinations when the input contains long whitespace sequences.
+    _qv = r"(?:['\"][^'\"]{0,500}['\"]|\S{1,500})"
     case_re = re.compile(
-        r"CASE\s+WHEN\s+(.+?)\s+THEN\s+['\"]?(.+?)['\"]?\s+ELSE\s+['\"]?(.+?)['\"]?\s+END(?:\s+AS\s+(\w+))?",
+        rf"CASE\s+WHEN\s+(.{{1,500}}?)\s+THEN\s+({_qv})\s+ELSE\s+({_qv})\s+END(?:\s+AS\s+(\w+))?",
         re.IGNORECASE,
     )
 

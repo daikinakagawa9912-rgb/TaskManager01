@@ -80,11 +80,10 @@ function clearError() {
 }
 
 // ── Clipboard ──────────────────────────────────────────────────────────────
-function copyToClipboard(elementId) {
+function copyToClipboard(elementId, btn) {
   const text = document.getElementById(elementId).textContent;
   if (!text || text === '-') return;
   navigator.clipboard.writeText(text).then(() => {
-    const btn = event.currentTarget;
     const orig = btn.textContent;
     btn.textContent = '✅ コピー完了';
     setTimeout(() => { btn.textContent = orig; }, 1500);

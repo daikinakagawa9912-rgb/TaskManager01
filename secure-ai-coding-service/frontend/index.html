@@ -119,7 +119,7 @@ CREATE TABLE departments (
         <div class="result-block">
           <div class="result-header">
             <span class="result-label">✅ 復元済み SQL（本番用）</span>
-            <button class="btn btn-copy" onclick="copyToClipboard('resultSql')">コピー</button>
+            <button class="btn btn-copy" onclick="copyToClipboard('resultSql', this)">コピー</button>
           </div>
           <pre id="resultSql" class="code-block">ここに生成された SQL が表示されます。</pre>
         </div>
@@ -133,7 +133,7 @@ CREATE TABLE departments (
           <div class="result-block" style="margin-top:.5rem">
             <div class="result-header">
               <span class="result-label">🔒 抽象化 SQL（Claude 出力）</span>
-              <button class="btn btn-copy" onclick="copyToClipboard('abstractSql')">コピー</button>
+              <button class="btn btn-copy" onclick="copyToClipboard('abstractSql', this)">コピー</button>
             </div>
             <pre id="abstractSql" class="code-block abstract">-</pre>
           </div>

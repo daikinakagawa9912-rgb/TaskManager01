@@ -89,6 +89,12 @@ async def generate_sql(request: GenerateSqlRequest):
     if not request.requirements.strip():
         raise HTTPException(status_code=400, detail="requirements must not be empty.")
 
+    # Limit input sizes to prevent ReDoS and abuse
+    if len(request.create_statements) > 100_000:
+        raise HTTPException(status_code=400, detail="create_statements exceeds maximum length (100,000 chars).")
+    if len(request.requirements) > 20_000:
+        raise HTTPException(status_code=400, detail="requirements exceeds maximum length (20,000 chars).")
+
     logger.info("Received /api/generate-sql request.")
     response = process_request(request)
 
